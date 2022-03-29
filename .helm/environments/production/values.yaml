@@ -1,7 +1,7 @@
 global:
   backend:
     env:
-      DJANGO_SECRET_KEY: "+e8kb#2#jo93hr@c9)x9t*ghw)5=!$bk8w$n9()w%n-grmv14v"
+      DJANGO_SECRET_KEY: ""
       DJANGO_ALLOWED_HOSTS: "emt.sparklingtide.dev"
 
       DATABASE_URL: postgres://emt:emt@backend-postgresql:5432/emt
