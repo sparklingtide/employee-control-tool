@@ -37,9 +37,6 @@ class OpenVPN(Resource):
             employee=employee,
             common_name=common_name,
             serial_number=response["data"]["serial_number"],
-            certificate=response["data"]["certificate"],
-            private_key=response["data"]["private_key"],
-            issuing_ca=response["data"]["issuing_ca"],
         )
         self._send_access_mail(
             employee,
@@ -126,9 +123,6 @@ class OpenVPNClient(Resource):
     employee = models.ForeignKey("employees.Employee", on_delete=models.PROTECT)
     common_name = models.CharField(max_length=100)
     serial_number = models.CharField(max_length=100)
-    certificate = models.TextField()
-    private_key = models.TextField()
-    issuing_ca = models.TextField()
 
     class Meta:
         unique_together = ("vpn", "employee")
