@@ -9,7 +9,8 @@ class OpenVPNListView(generics.ListCreateAPIView):
     serializer_class = OpenVPNSerializer
 
     def perform_create(self, serializer):
-        return OpenVPN.create(**serializer.validated_data)
+        serializer.instance = OpenVPN.create(**serializer.validated_data)
+        return serializer.instance
 
 
 class OpenVPNDetailView(generics.RetrieveUpdateDestroyAPIView):
