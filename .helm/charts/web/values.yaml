@@ -1,0 +1,42 @@
+replicaCount: 1
+
+image: {}
+
+command: [ "gunicorn", "emt.wsgi:application", "-b", "0.0.0.0", "--access-logfile", "-", "--capture-output", "--threads", "5" ]
+
+args:
+  - -b
+  - 0.0.0.0:8000
+  - --access-logfile
+  - "-"
+  - --capture-output
+  - --threads
+  - 5
+
+resources:
+  limits: {}
+  requests: {}
+
+service:
+  port: 8000
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8000
+    targetPort: 8000
+
+env: {}
+
+extraEnv: []
+# - name: ENV_USER_PASSWORD
+#   valueFrom:
+#     secretKeyRef:
+#       name: secret-user
+#       key: password
+
+autoscaling:
+  enabled: false
+  minReplicas: 3
+  maxReplicas: 40
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: null

@@ -1,0 +1,89 @@
+global:
+  backend:
+    image:
+      repository: registry.gitlab.com/sparkling-tide/sparklingtide-tools/employee-control-tool/backend
+      tag: latest
+      pullPolicy: IfNotPresent
+      pullSecrets:
+        - emt-pullsecret
+    env:
+      CONTAINER_PORT: 8000
+
+      DJANGO_DEBUG: "off"
+      DJANGO_SECRET_KEY: ""
+      DJANGO_ALLOWED_HOSTS: ""
+
+      AWS_S3_ENDPOINT_URL: ""
+      AWS_ACCESS_KEY_ID: ""
+      AWS_SECRET_ACCESS_KEY: ""
+      AWS_S3_BUCKET_NAME: ""
+
+      MAILGUN_SENDER_DOMAIN: "mg.sparklingtide.dev"
+      DJANGO_DEFAULT_FROM_EMAIL: "noreply@sparklingtide.dev"
+      MAILGUN_API_KEY: ""
+      MAILGUN_API_URL: "https://api.eu.mailgun.net/v3"
+
+web:
+  replicaCount: 1
+
+  resources: {}
+
+  ingress:
+    hosts:
+      - host:
+        paths:
+        - /api
+        - /static
+
+  # livenessProbe:
+  #   httpGet:
+  #     path: /health
+  #     port: http
+  #   periodSeconds: 10
+  #   timeoutSeconds: 10
+  #   successThreshold: 1
+  #   failureThreshold: 3
+
+  # readinessProbe:
+  #   httpGet:
+  #     path: /health
+  #     port: http
+  #   periodSeconds: 10
+  #   timeoutSeconds: 10
+  #   successThreshold: 1
+  #   failureThreshold: 3
+
+  # startupProbe:
+  #   httpGet:
+  #     path: /health
+  #     port: http
+  #   failureThreshold: 60
+  #   periodSeconds: 10
+
+  metrics:
+    enabled: false
+    serviceMonitor:
+      endpoints:
+      - port: http
+        path: /metrics
+
+migrations:
+  resources: {}
+
+postgresql:
+  enabled: true
+  image:
+    tag: 13.1.0
+  postgresPassword: postgres
+  auth:
+    postgresPassword: postgres
+    username: emt
+    password: emt
+    database: emt
+  primary:
+    persistence:
+      size: 1Gi
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false

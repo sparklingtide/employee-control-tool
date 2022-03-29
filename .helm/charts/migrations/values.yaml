@@ -1,0 +1,15 @@
+image: {}
+
+command: [ "python", "manage.py", "migrate" ]
+
+args: []
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+env: {}

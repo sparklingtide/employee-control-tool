@@ -1,0 +1,67 @@
+stages:
+  - build
+  - deploy
+
+.build:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  only:
+    - master
+    - dev
+  before_script:
+    - export LATEST_IMAGE_TAG=$IMAGE_NAME:latest
+    - export COMMIT_IMAGE_TAG=$IMAGE_NAME:${CI_COMMIT_SHA:0:8}
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}/${CONTEXT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/${CONTEXT_DIR}/Dockerfile"
+      --destination "$LATEST_IMAGE_TAG"
+      --destination "$COMMIT_IMAGE_TAG"
+      --cache
+
+build:
+  extends: .build
+  variables:
+    IMAGE_NAME: $CI_REGISTRY_IMAGE/backend
+    CONTEXT_DIR: .
+
+.deploy:
+  image:
+    name: alpine/helm
+    entrypoint: [""]
+  stage: deploy
+  variables:
+    HELM_TIMEOUT: 5m
+  before_script:
+    - apk add gpg gpg-agent
+    - echo "$CI_GPG_SECRET_KEY" | gpg --import
+    - helm plugin install https://github.com/jkroepke/helm-secrets --version v3.12.0
+    - wget -nv -O /usr/bin/sops https://github.com/mozilla/sops/releases/download/v3.7.2/sops-v3.7.2.linux.amd64
+    - chmod +x /usr/bin/sops
+  script:
+    - .ops/deploy_chart.sh
+        .
+        $HELM_TIMEOUT
+        $KUBECONFIG
+        $KUBECONTEXT
+        $KUBE_NAMESPACE
+        $ENVIRONMENT
+        global.backend.image.tag
+        backend
+
+deploy production:
+  extends: .deploy
+  environment:
+    name: production
+  only:
+    refs:
+      - master
+  variables:
+    KUBECONTEXT: sparkling-tide/sparklingtide-tools/employee-control-tool:k3s
+    KUBE_NAMESPACE: emt-production
+    ENVIRONMENT: production
