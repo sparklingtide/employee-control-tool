@@ -32,7 +32,7 @@ build:
 
 .deploy:
   image:
-    name: anatolygusev/helm_secrets
+    name: anatolygusev/helm-secrets
     entrypoint: [""]
   stage: deploy
   variables:
