@@ -58,6 +58,6 @@ deploy production:
     refs:
       - master
   variables:
-    KUBECONTEXT: sparkling-tide/sparklingtide-k3s
+    KUBECONTEXT: sparkling-tide/sparklingtide-k3s:k3s
     KUBE_NAMESPACE: emt-production
     ENVIRONMENT: production
