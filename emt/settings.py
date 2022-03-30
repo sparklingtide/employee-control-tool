@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 
 import environ
@@ -264,5 +265,12 @@ SWAGGER_SETTINGS = {
             "name": "Authorization",
             "in": "header",
         }
-    }
+    },
+    'USE_SESSION_AUTH': False,
+    'PERSIST_AUTH': True,
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
 }

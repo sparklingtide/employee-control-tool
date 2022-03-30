@@ -1,3 +1,4 @@
+from emt.utils.choices import count_max_length
 import hvac
 from django.core.mail import EmailMessage
 from django.db import models
@@ -50,25 +51,34 @@ class OpenVPN(Resource):
         openvpn_client = self.clients.get(employee=employee)
         client = self._get_hvac()
         client.secrets.pki.revoke_certificate(
-            serial_number=openvpn_client.serial_number
+            serial_number=openvpn_client.serial_number,
+            mount_point=self.vault_pki_mount_point,
         )
         openvpn_client.delete()
 
-    def generate_config(self, employee):
+    def reset_config(self, employee):
         openvpn_client = self.clients.get(employee=employee)
-        return openvpn_client.common_name, render_to_string(
-            "providers/openvpn/client.ovpn",
-            {
-                "openvpn_host": self.openvpn_host,
-                "openvpn_port": self.openvpn_port,
-                "issuing_ca": openvpn_client.issuing_ca,
-                "tls_auth": self.ta_key,
-                "certificate": openvpn_client.certificate,
-                "private_key": openvpn_client.private_key,
-            },
+        client = self._get_hvac()
+        client.secrets.pki.revoke_certificate(
+            serial_number=openvpn_client.serial_number,
+            mount_point=self.vault_pki_mount_point,
+        )
+        response = client.secrets.pki.generate_certificate(
+            name=self.vault_pki_role_name,
+            common_name=openvpn_client.common_name,
+            mount_point=self.vault_pki_mount_point,
+        )
+        openvpn_client.serial_number = response["data"]["serial_number"]
+        openvpn_client.save()
+        self._send_access_mail(
+            employee,
+            openvpn_client.common_name,
+            response["data"]["private_key"],
+            response["data"]["certificate"],
+            response["data"]["issuing_ca"],
         )
 
-    def _generate_config(self, private_key, certificate, issuing_ca):
+    def _generate_config(self, private_key, certificate, issuing_ca, employee):
         return render_to_string(
             "providers/openvpn/client.ovpn",
             {
@@ -78,6 +88,7 @@ class OpenVPN(Resource):
                 "tls_auth": self.ta_key,
                 "certificate": certificate,
                 "private_key": private_key,
+                "os": employee.os,
             },
         )
 
@@ -97,13 +108,16 @@ class OpenVPN(Resource):
     def _send_access_mail(
         self, employee, common_name, private_key, certificate, issuing_ca
     ):
-        config = self._generate_config(private_key, certificate, issuing_ca)
+        config = self._generate_config(private_key, certificate, issuing_ca, employee)
         mail = EmailMessage(
             "Доступ к корпоративному VPN",
-            "Вы получили доступ к OpenVPN. Инструкцию по установке "
-            "можно найти на сайте https://openvpn.net/vpn-client/. "
-            "Файл конфигурации, который необходимо передать OpenVPN Connect, "
-            "во вложении",
+            "Вы получили доступ к корпоративному VPN.\n"
+            "Клиент для Windows можно скачать по ссылке https://openvpn.net/community-downloads/\n"
+            "Установка для Linux:\n"
+            " $ sudo apt update; sudo apt install -y openvpn openvpn-systemd-resolved\n"
+            "В папке с конфигом:\n"
+            " $ sudo openvpn --config <название-файла-с-конфигом>\n"
+            "Файл конфигурации для OpenVPN во вложении.",
             to=[employee.email],
             attachments=[(f"{common_name}.ovpn", config, "text/plain")],
         )

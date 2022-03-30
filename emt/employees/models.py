@@ -1,22 +1,29 @@
 from django.db import models
 
 from emt.groups.models import Group
+from emt.utils.choices import count_max_length
 
 
 class Employee(models.Model):
+    class OS(models.TextChoices):
+        WINDOWS = "windows"
+        LINUX = "linux"
+        MAC_OS = "mac_os"
+
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
+
+    os = models.CharField(max_length=count_max_length(OS), choices=OS.choices)
+
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
     @classmethod
-    def create(cls, first_name, last_name, email):
-        employee = Employee.objects.create(
-            first_name=first_name, last_name=last_name, email=email
-        )
+    def create(cls, **kwargs):
+        employee = Employee.objects.create(**kwargs)
         root_group = Group.get_root()
         root_group.add_employee(employee)
         return employee

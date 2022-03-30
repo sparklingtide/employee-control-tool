@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from emt.employees.models import Employee
+
 from .models import OpenVPN
 
 
@@ -18,3 +20,7 @@ class OpenVPNSerializer(serializers.ModelSerializer):
             "vault_kv_mount_point",
         )
         extra_kwargs = {"vault_approle_secret_id": {"write_only": True}}
+
+
+class EmployeeIdSerializer(serializers.Serializer):
+    employee_id = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
