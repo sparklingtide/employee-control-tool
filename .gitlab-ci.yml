@@ -40,7 +40,6 @@ build:
   before_script:
     - echo "$CI_GPG_SECRET_KEY" | gpg --import
   script:
-    - cat $KUBECONFIG
     - .ops/deploy_chart.sh
         .
         $HELM_TIMEOUT
