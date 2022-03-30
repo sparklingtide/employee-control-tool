@@ -1,7 +1,7 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics
 from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
 
 from .models import OpenVPN
 from .serializers import EmployeeIdSerializer, OpenVPNSerializer

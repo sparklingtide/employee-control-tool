@@ -1,4 +1,3 @@
-from emt.utils.choices import count_max_length
 import hvac
 from django.core.mail import EmailMessage
 from django.db import models
