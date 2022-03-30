@@ -1,20 +1,12 @@
 from django.db import models
 
 from emt.groups.models import Group
-from emt.utils.choices import count_max_length
 
 
 class Employee(models.Model):
-    class OS(models.TextChoices):
-        WINDOWS = "windows"
-        LINUX = "linux"
-        MAC_OS = "mac_os"
-
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
-
-    os = models.CharField(max_length=count_max_length(OS), choices=OS.choices)
 
     is_active = models.BooleanField(default=True)
 

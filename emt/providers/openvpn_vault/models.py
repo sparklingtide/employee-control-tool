@@ -78,7 +78,7 @@ class OpenVPN(Resource):
             response["data"]["issuing_ca"],
         )
 
-    def _generate_config(self, private_key, certificate, issuing_ca, employee):
+    def _generate_config(self, private_key, certificate, issuing_ca, os):
         return render_to_string(
             "providers/openvpn/client.ovpn",
             {
@@ -88,7 +88,7 @@ class OpenVPN(Resource):
                 "tls_auth": self.ta_key,
                 "certificate": certificate,
                 "private_key": private_key,
-                "os": employee.os,
+                "os": os,
             },
         )
 
@@ -108,18 +108,41 @@ class OpenVPN(Resource):
     def _send_access_mail(
         self, employee, common_name, private_key, certificate, issuing_ca
     ):
-        config = self._generate_config(private_key, certificate, issuing_ca, employee)
         mail = EmailMessage(
             "Доступ к корпоративному VPN",
             "Вы получили доступ к корпоративному VPN.\n"
-            "Клиент для Windows можно скачать по ссылке https://openvpn.net/community-downloads/\n"
+            "Клиент для Windows можно скачать по ссылке "
+            "https://openvpn.net/community-downloads/\n"
             "Установка для Linux:\n"
             " $ sudo apt update; sudo apt install -y openvpn openvpn-systemd-resolved\n"
             "В папке с конфигом:\n"
             " $ sudo openvpn --config <название-файла-с-конфигом>\n"
-            "Файл конфигурации для OpenVPN во вложении.",
+            "Используйте файл конфигурации OpenVPN из вложений в зависимости "
+            "от используемой операционной системы.",
             to=[employee.email],
-            attachments=[(f"{common_name}.ovpn", config, "text/plain")],
+            attachments=[
+                (
+                    f"{common_name}-win.ovpn",
+                    self._generate_config(
+                        private_key, certificate, issuing_ca, "windows"
+                    ),
+                    "text/plain",
+                ),
+                (
+                    f"{common_name}-linux.ovpn",
+                    self._generate_config(
+                        private_key, certificate, issuing_ca, "linux"
+                    ),
+                    "text/plain",
+                ),
+                (
+                    f"{common_name}-macos.ovpn",
+                    self._generate_config(
+                        private_key, certificate, issuing_ca, "macos"
+                    ),
+                    "text/plain",
+                ),
+            ],
         )
         mail.send()
 
