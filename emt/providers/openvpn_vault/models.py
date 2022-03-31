@@ -116,6 +116,13 @@ class OpenVPN(Resource):
             " $ sudo apt update; sudo apt install -y openvpn openvpn-systemd-resolved\n"
             "В папке с конфигом:\n"
             " $ sudo openvpn --config <название-файла-с-конфигом>\n"
+            "Если в вашем дистрибутиве используется NetworkManager, то можно "
+            "воспользоваться его OpenVPN плагином для подключения:\n"
+            " $ sudo apt update; "
+            "sudo apt install -y openvpn openvpn-systemd-resolved "
+            "network-manager-openvpn-gnome\n"
+            'После откройте в настройках "Настройки VPN" -> '
+            '"Добавить VPN" -> "Загрузить из файла".\n'
             "Используйте файл конфигурации OpenVPN из вложений в зависимости "
             "от используемой операционной системы.",
             to=[employee.email],
