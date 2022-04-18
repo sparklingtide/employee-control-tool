@@ -7,6 +7,7 @@ class Employee(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
+    telegram = models.CharField(max_length=100)
 
     is_active = models.BooleanField(default=True)
 

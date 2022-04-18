@@ -129,3 +129,10 @@ node_modules/
 # Django var paths
 /uploads/
 /static/
+
+# Editor files
+.idea/*
+
+# Local dev files
+*.session
+/docker-compose.yml

@@ -19,7 +19,7 @@ class OpenVPN(Resource):
     ta_key = models.TextField()
 
     @classmethod
-    def create(self, **kwargs):
+    def create(cls, **kwargs):
         openvpn = OpenVPN(**kwargs)
         openvpn.ta_key = openvpn._pull_ta_key()
         openvpn.save()
