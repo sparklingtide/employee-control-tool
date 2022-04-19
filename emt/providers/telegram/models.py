@@ -24,6 +24,9 @@ class Telegram(Resource):
         return telegram
 
     def give_access(self, employee):
+        if not employee.telegram:
+            return
+
         client = self._get_client()
         client(
             AddChatUserRequest(
@@ -34,6 +37,9 @@ class Telegram(Resource):
         )
 
     def revoke_access(self, employee):
+        if not employee.telegram:
+            return
+
         client = self._get_client()
         client(
             DeleteChatUserRequest(
@@ -44,7 +50,7 @@ class Telegram(Resource):
         )
 
     @staticmethod
-    def _get_client() -> settings.TelegramAPIClient:
+    def _get_client():
         client = settings.TelegramAPIClient
         assert client is not None, "Telegram broken"
         client.connect()

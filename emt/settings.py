@@ -4,6 +4,7 @@ from pathlib import Path
 import environ
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+from telethon.sessions import MemorySession
 from telethon.sync import TelegramClient
 
 env = environ.Env()
@@ -62,6 +63,7 @@ LOCAL_APPS = [
     "emt.groups",
     "emt.providers",
     "emt.providers.openvpn_vault",
+    "emt.providers.telegram",
     "emt.providers.testprovider",
 ]
 
@@ -227,7 +229,7 @@ TELEGRAM_BASE_USERS = env.list(
 TelegramAPIClient = None
 if TELEGRAM_API_ID and TELEGRAM_API_HASH:
     TelegramAPIClient = TelegramClient(
-        TELEGRAM_SESSION_NAME,
+        MemorySession(),
         TELEGRAM_API_ID,
         TELEGRAM_API_HASH,
     )
