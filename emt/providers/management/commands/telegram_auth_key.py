@@ -3,13 +3,14 @@ import os
 from django.conf import settings
 from django.core.management import BaseCommand
 from telethon.sessions import StringSession
+from telethon.sync import TelegramClient
 
 
 class Command(BaseCommand):
     help = "Retrieve auth token for Telegram"
 
     def handle(self, *args, **options):
-        with settings.TELEGRAM_API_CLIENT(
+        with TelegramClient(
             "generator",
             settings.TELEGRAM_API_ID,
             settings.TELEGRAM_API_HASH,
