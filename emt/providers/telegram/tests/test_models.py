@@ -1,7 +1,5 @@
-from typing import Tuple
 from unittest.mock import Mock, patch
 
-from django.db.models import QuerySet
 from django.test import TestCase
 
 from emt.employees.models import Permission
@@ -36,9 +34,31 @@ class TelegramResourceTestCase(TestCase):
         "emt.providers.telegram.models.Telegram._get_client", return_value=mocked_client
     )
     def test_give_and_revoke_access(self, client: Mock) -> None:
-        permission_qs, telegram = self._give_access()
+        telegram = Telegram.create(
+            name="test_group",
+        )
+
+        # Check there is a request for base users after resource creation
+        self.assertEqual(client.call_count, 1)
+
+        self.group.add_resource(telegram)
+
+        # Check there is a request for employee after resource assignment
+        self.assertEqual(client.call_count, 2)
+
+        permission_qs = Permission.objects.filter(
+            source=self.group,
+            resource=telegram,
+            employee=self.employee,
+        )
+
+        self.assertTrue(permission_qs.exists())
 
         self.group.remove_resource(telegram)
+
+        # Check there is a request for employee after resource removal
+        self.assertEqual(client.call_count, 3)
+
         group_qs = Group.objects.filter(
             resources__in=[telegram],
             employees__in=[self.employee],
@@ -46,18 +66,3 @@ class TelegramResourceTestCase(TestCase):
 
         self.assertFalse(group_qs.exists())
         self.assertFalse(permission_qs.exists())
-
-    def _give_access(self) -> Tuple[QuerySet, Telegram]:
-        telegram = Telegram.create(
-            name="test_group",
-        )
-        self.group.add_resource(telegram)
-
-        qs = Permission.objects.filter(
-            source=self.group,
-            resource=telegram,
-            employee=self.employee,
-        )
-
-        self.assertTrue(qs.exists())
-        return qs, telegram
