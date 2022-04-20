@@ -31,6 +31,7 @@ services:
       TELEGRAM_API_ID: 
       TELEGRAM_API_HASH: 
       TELEGRAM_BASE_USERS: 
+      TELEGRAM_STRING_SESSION:
       DJANGO_SETTINGS_MODULE: "emt.settings"
     ports:
       - 8000:8000
