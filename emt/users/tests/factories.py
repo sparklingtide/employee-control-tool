@@ -1,6 +1,8 @@
 import factory
-from ..models import User
+
 from emt.core.tests.utils.factories import CustomDjangoModelFactory
+
+from ..models import User
 
 
 class UserModelFactory(CustomDjangoModelFactory):

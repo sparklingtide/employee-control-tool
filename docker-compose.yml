@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: .
+      args:
+        # [Choice] Python version: 3, 3.8, 3.7, 3.6
+        VARIANT: 3.9
+        # [Choice] Install Node.js
+        INSTALL_NODE: "true"
+        NODE_VERSION: "lts/*"
+        # On Linux, you may need to update USER_UID and USER_GID below if not your local UID is not 1000.
+        USER_UID: 1000
+        USER_GID: 1000
+
+    volumes:
+      - ./:/app
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+    depends_on:
+      - db
+
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/emt
+      PGPASSWORD: postgres
+      EMAIL_URL: smtp://mailhog:1025
+      CELERY_BROKER_URL: amqp://rabbitmq:5672
+      TELEGRAM_API_ID:
+      TELEGRAM_API_HASH:
+      TELEGRAM_BASE_USERS:
+      TELEGRAM_STRING_SESSION:
+      DJANGO_SETTINGS_MODULE: "emt.settings"
+    ports:
+      - 8000:8000
+
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    ports:
+      - 8025:8025
+
+  rabbitmq:
+    image: library/rabbitmq:3.8.9-alpine
+
+volumes:
+  postgres-data:

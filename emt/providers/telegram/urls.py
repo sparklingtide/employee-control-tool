@@ -1,8 +1,8 @@
-from django.urls import path
+from rest_framework.routers import SimpleRouter
 
 from . import views
 
-urlpatterns = [
-    path("", views.TelegramListView.as_view()),
-    path("<int:pk>/", views.TelegramDetailView.as_view()),
-]
+router = SimpleRouter()
+router.register("", views.TelegramViewSet, basename="telegram")
+
+urlpatterns = router.urls

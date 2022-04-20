@@ -1,6 +1,8 @@
 import factory
-from ..models import Group
+
 from emt.core.tests.utils.factories import CustomDjangoModelFactory
+
+from ..models import Group
 
 
 class GroupModelFactory(CustomDjangoModelFactory):

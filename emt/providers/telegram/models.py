@@ -1,7 +1,12 @@
-from django.db import models
-from emt.providers.models import Resource
 from django.conf import settings
-from telethon.tl.functions.messages import CreateChatRequest, AddChatUserRequest, DeleteChatUserRequest
+from django.db import models
+from telethon.tl.functions.messages import (
+    AddChatUserRequest,
+    CreateChatRequest,
+    DeleteChatUserRequest,
+)
+
+from emt.providers.models import Resource
 
 
 class Telegram(Resource):
@@ -51,7 +56,7 @@ class Telegram(Resource):
 
     @staticmethod
     def _get_client():
-        client = settings.TelegramAPIClient
+        client = settings.TELEGRAM_API_CLIENT
         assert client is not None, "Telegram broken"
         client.connect()
         return client

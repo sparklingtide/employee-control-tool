@@ -1,7 +1,9 @@
 import factory
-from ..models import Employee, Permission
+
 from emt.core.tests.utils.factories import CustomDjangoModelFactory
 from emt.groups.tests.factories import GroupModelFactory
+
+from ..models import Employee, Permission
 
 
 class EmployeeModelFactory(CustomDjangoModelFactory):
@@ -15,8 +17,8 @@ class EmployeeModelFactory(CustomDjangoModelFactory):
 
 
 class PermissionModelFactory(CustomDjangoModelFactory):
-    source = factory.SubFactory(GroupModelFactory())
-    employee = factory.SubFactory(EmployeeModelFactory())
+    source = factory.SubFactory(GroupModelFactory)
+    employee = factory.SubFactory(EmployeeModelFactory)
 
     class Meta:
         model = Permission

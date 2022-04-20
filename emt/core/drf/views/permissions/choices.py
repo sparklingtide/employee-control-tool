@@ -8,19 +8,20 @@ class All(MetaPermission):
     Allows access when all permissions passed in its constructor has
     permission
     """
+
     def _check_permission(self, method_name, *args):
         return all(
-            (getattr(permission(), method_name)(*args)
-             for permission in self.permissions)
+            (
+                getattr(permission(), method_name)(*args)
+                for permission in self.permissions
+            )
         )
 
     def has_permission(self, request, view):
-        return self._check_permission('has_permission', request, view)
+        return self._check_permission("has_permission", request, view)
 
     def has_object_permission(self, request, view, obj):
-        return self._check_permission(
-            'has_object_permission', request, view, obj
-        )
+        return self._check_permission("has_object_permission", request, view, obj)
 
 
 class AnyOf(MetaPermission):
@@ -49,6 +50,8 @@ class AnyOf(MetaPermission):
 
     def has_object_permission(self, request, view, obj):
         return any(
-            (permission().has_object_permission(request, view, obj)
-             for permission in self.allowed_permissions)
+            (
+                permission().has_object_permission(request, view, obj)
+                for permission in self.allowed_permissions
+            )
         )

@@ -4,7 +4,7 @@ from pathlib import Path
 import environ
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
-from telethon.sessions import MemorySession
+from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 
 env = environ.Env()
@@ -220,16 +220,16 @@ SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default="root@localhost")
 # ------------------------------------------------------------------------------
 TELEGRAM_API_ID = env("TELEGRAM_API_ID", default=None)
 TELEGRAM_API_HASH = env("TELEGRAM_API_HASH", default=None)
-TELEGRAM_SESSION_NAME = env("TELEGRAM_SESSION_NAME", default="employee_control")
+TELEGRAM_STRING_SESSION = env("TELEGRAM_STRING_SESSION", default=None)
 TELEGRAM_BASE_USERS = env.list(
     "TELEGRAM_BASE_USERS",
     default=[],
 )
 
-TelegramAPIClient = None
+TELEGRAM_API_CLIENT = None
 if TELEGRAM_API_ID and TELEGRAM_API_HASH:
-    TelegramAPIClient = TelegramClient(
-        MemorySession(),
+    TELEGRAM_API_CLIENT = TelegramClient(
+        StringSession(TELEGRAM_STRING_SESSION),
         TELEGRAM_API_ID,
         TELEGRAM_API_HASH,
     )

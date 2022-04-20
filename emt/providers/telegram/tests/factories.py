@@ -1,6 +1,8 @@
 import factory
-from ..models import Telegram
+
 from emt.core.tests.utils.factories import CustomDjangoModelFactory
+
+from ..models import Telegram
 
 
 class TelegramModelFactory(CustomDjangoModelFactory):
