@@ -19,45 +19,41 @@ def telegram(telegram_client):
     yield telegram
 
 
+@pytest.mark.django_db
 class TestTelegramViews:
     url_list = reverse("telegram-list")
     data = {"name": "test_name"}
 
     @staticmethod
     def url_detail(telegram):
-        return reverse("telegram-detail", args=[telegram.telegram.id])
+        return reverse("telegram-detail", args=[telegram.id])
 
-    def test_list(self, admin_client, telegram, setup_user) -> None:
-        admin_client.force_login(setup_user)
-        response = admin_client.get(self.url_list)
+    def test_list(self, api_client, telegram) -> None:
+        response = api_client.get(self.url_list)
 
         assert response.status_code == status.HTTP_200_OK
         assert response.data[0]["id"] == telegram.id
 
-    def test_detail(self, admin_client, telegram, setup_user) -> None:
-        admin_client.force_login(setup_user)
-        response = admin_client.get(self.url_detail)
+    def test_detail(self, api_client, telegram) -> None:
+        response = api_client.get(self.url_detail(telegram))
 
         assert response.status_code == status.HTTP_200_OK
         assert response.data["id"] == telegram.id
 
-    def test_create(self, admin_client, telegram, setup_user) -> None:
-        admin_client.force_login(setup_user)
-        response = admin_client.post(self.url_list, data=self.data)
+    def test_create(self, api_client, telegram) -> None:
+        response = api_client.post(self.url_list, data=self.data)
 
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data["name"] == self.data["name"]
 
-    def test_partial_update(self, admin_client, telegram, setup_user) -> None:
-        admin_client.force_login(setup_user)
-        response = admin_client.patch(self.url_detail, data=self.data)
+    def test_partial_update(self, api_client, telegram) -> None:
+        response = api_client.patch(self.url_detail(telegram), data=self.data)
 
         assert response.status_code == status.HTTP_200_OK
         assert response.data["name"] == self.data["name"]
 
-    def test_update(self, admin_client, telegram, setup_user) -> None:
-        admin_client.force_login(setup_user)
-        response = admin_client.put(self.url_detail, data=self.data)
+    def test_update(self, api_client, telegram) -> None:
+        response = api_client.put(self.url_detail(telegram), data=self.data)
 
         assert response.status_code == status.HTTP_200_OK
         assert response.data["name"] == self.data["name"]

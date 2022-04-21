@@ -1,4 +1,5 @@
 import pytest
+from rest_framework.test import APIClient
 
 from emt.groups.models import Group
 from emt.users.tests.factories import UserModelFactory
@@ -30,3 +31,10 @@ def setup_user():
     user.set_password("1")
     user.save()
     return user
+
+
+@pytest.fixture(autouse=True)
+def api_client(setup_user):
+    client = APIClient()
+    client.force_authenticate(setup_user)
+    return client
