@@ -4,7 +4,7 @@
 
 ### Установка на чистую систему
 
-1. Необходима установленный python3.10, для управления зависимостями используется [poetry](https://python-poetry.org/docs/#installation)
+1. Необходим установленный python3.10, для управления зависимостями используется [poetry](https://python-poetry.org/docs/#installation)
 2.
     ```shell
     $ poetry install --no-root
