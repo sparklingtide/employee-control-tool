@@ -23,12 +23,12 @@ class TestTelegramModels:
         # Check there is a request for base users after resource creation
         assert telegram_client.call_count == 1
 
-        root_group.add_resource(telegram)
+        telegram.give_access(employee)
 
         # Check there is a request for employee after resource assignment
         assert telegram_client.call_count == 2
 
-        root_group.remove_resource(telegram)
+        telegram.revoke_access(employee)
 
         # Check there is a request for employee after resource removal
         assert telegram_client.call_count == 3
