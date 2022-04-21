@@ -2,17 +2,17 @@ import pytest
 from rest_framework import status
 from rest_framework.reverse import reverse
 
-from emt.employees.tests.factories import EmployeeModelFactory
-from emt.groups.tests.factories import GroupModelFactory
+from emt.employees.tests.factories import EmployeeFactory
+from emt.groups.tests.factories import GroupFactory
 
-from .factories import TelegramModelFactory
+from .factories import TelegramFactory
 
 
 @pytest.fixture
 def telegram(telegram_client):
-    group = GroupModelFactory()
-    employee = EmployeeModelFactory()
-    telegram = TelegramModelFactory()
+    group = GroupFactory()
+    employee = EmployeeFactory()
+    telegram = TelegramFactory()
     group.add_employee(employee)
     group.add_resource(telegram)
 

@@ -2,7 +2,7 @@ import pytest
 from rest_framework.test import APIClient
 
 from emt.groups.models import Group
-from emt.users.tests.factories import UserModelFactory
+from emt.users.tests.factories import UserFactory
 
 
 @pytest.fixture(autouse=True)
@@ -27,7 +27,7 @@ def telegram_client(mocker):
 
 @pytest.fixture(autouse=True)
 def setup_user():
-    user = UserModelFactory()
+    user = UserFactory()
     user.set_password("1")
     user.save()
     return user
