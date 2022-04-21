@@ -1,6 +1,26 @@
 stages:
+  - static analysis
   - build
   - deploy
+
+# STATIC ANALYSIS
+
+pre-commit checks:
+  stage: static analysis
+  image:
+    name: anatolygusev/pre-commit
+  variables:
+    PRE_COMMIT_HOME: ${CI_PROJECT_DIR}/.cache/pre-commit
+  cache:
+    paths:
+      - ${PRE_COMMIT_HOME}
+  except:
+    refs:
+      - master
+  script:
+    - pre-commit run -a
+
+# BUILD
 
 .build:
   stage: build
@@ -29,6 +49,8 @@ build:
   variables:
     IMAGE_NAME: $CI_REGISTRY_IMAGE/backend
     CONTEXT_DIR: .
+
+# DEPLOY
 
 .deploy:
   image:
