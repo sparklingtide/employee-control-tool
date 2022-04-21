@@ -3,7 +3,7 @@
 // Update the VARIANT arg in docker-compose.yml to pick a Python version: 3, 3.8, 3.7, 3.6
 {
 	"name": "Users Management Tool",
-	"dockerComposeFile": "docker-compose.yml",
+	"dockerComposeFile": ["../docker-compose.yml", "docker-compose.yml"],
 	"service": "app",
 	"workspaceFolder": "/workspace",
 
