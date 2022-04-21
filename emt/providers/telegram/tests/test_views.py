@@ -16,7 +16,7 @@ def telegram(telegram_client):
     group.add_employee(employee)
     group.add_resource(telegram)
 
-    yield telegram
+    return telegram
 
 
 @pytest.mark.django_db
