@@ -26,6 +26,11 @@ services:
       PGPASSWORD: postgres
       EMAIL_URL: smtp://mailhog:1025
       PRE_COMMIT_HOME: "/workspace/.cache/pre-commit"
+      TELEGRAM_API_ID:
+      TELEGRAM_API_HASH:
+      TELEGRAM_BASE_USERS:
+      TELEGRAM_STRING_SESSION:
+      DJANGO_SETTINGS_MODULE: "emt.settings"
 
   postgres:
     image: postgres:14.2-alpine

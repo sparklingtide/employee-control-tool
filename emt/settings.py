@@ -4,6 +4,8 @@ from pathlib import Path
 import environ
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+from telethon.sessions import StringSession
+from telethon.sync import TelegramClient
 
 env = environ.Env()
 
@@ -61,6 +63,7 @@ LOCAL_APPS = [
     "emt.groups",
     "emt.providers",
     "emt.providers.openvpn_vault",
+    "emt.providers.telegram",
     "emt.providers.testprovider",
 ]
 
@@ -194,6 +197,7 @@ CORS_ALLOW_HEADERS = [
     "cache-control",
 ]
 
+
 # EMAIL
 # ------------------------------------------------------------------------------
 if env("MAILGUN_API_KEY", default=None):
@@ -210,6 +214,25 @@ if EMAIL_CONFIG:
 
 DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="webmaster@localhost")
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default="root@localhost")
+
+
+# TELEGRAM
+# ------------------------------------------------------------------------------
+TELEGRAM_API_ID = env("TELEGRAM_API_ID", default=None)
+TELEGRAM_API_HASH = env("TELEGRAM_API_HASH", default=None)
+TELEGRAM_STRING_SESSION = env("TELEGRAM_STRING_SESSION", default=None)
+TELEGRAM_BASE_USERS = env.list(
+    "TELEGRAM_BASE_USERS",
+    default=[],
+)
+
+TELEGRAM_API_CLIENT = None
+if all([TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_STRING_SESSION]):
+    TELEGRAM_API_CLIENT = TelegramClient(
+        StringSession(TELEGRAM_STRING_SESSION),
+        TELEGRAM_API_ID,
+        TELEGRAM_API_HASH,
+    )
 
 # CELERY
 # ------------------------------------------------------------------------------
