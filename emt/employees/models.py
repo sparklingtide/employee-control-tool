@@ -8,6 +8,7 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
     telegram = models.CharField(max_length=100, null=True, blank=True)
+    gitlab_username = models.CharField(max_length=100, null=True, blank=True)
 
     is_active = models.BooleanField(default=True)
 
