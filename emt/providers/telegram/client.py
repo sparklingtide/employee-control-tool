@@ -1,7 +1,8 @@
 import asyncio
 
-from telethon import TelegramClient
+from telethon.sync import TelegramClient
 from django.conf import settings
+from telethon.sessions import StringSession
 
 
 class TelethonClient:
@@ -12,10 +13,9 @@ class TelethonClient:
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             client = TelegramClient(
-                settings.TELEGRAM_STRING_SESSION,
+                StringSession(settings.TELEGRAM_STRING_SESSION),
                 settings.TELEGRAM_API_ID,
                 settings.TELEGRAM_API_HASH,
-                loop=loop
             )
             client.connect()
             cls.client = client
