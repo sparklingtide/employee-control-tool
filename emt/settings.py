@@ -4,8 +4,6 @@ from pathlib import Path
 import environ
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
-from telethon.sessions import StringSession
-from telethon.sync import TelegramClient
 
 env = environ.Env()
 
@@ -20,7 +18,6 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "127.0.0.
 
 DEFAULT_AUTO_FIELD = "django.db.models.fields.AutoField"
 
-
 # DATABASES
 # ------------------------------------------------------------------------------
 DATABASES = {
@@ -28,12 +25,10 @@ DATABASES = {
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
-
 # URLS
 # ------------------------------------------------------------------------------
 ROOT_URLCONF = "emt.urls"
 WSGI_APPLICATION = "emt.wsgi.application"
-
 
 # APPS
 # ------------------------------------------------------------------------------
@@ -70,7 +65,6 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + LOCAL_APPS
 
-
 # INTERNATIONALIZATION
 # ------------------------------------------------------------------------------
 LANGUAGE_CODE = "ru"
@@ -82,7 +76,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
@@ -121,7 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-
 # MIDDLEWARE
 # ------------------------------------------------------------------------------
 MIDDLEWARE = [
@@ -138,7 +130,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
 # STATIC
 # ------------------------------------------------------------------------------
 STATIC_ROOT = str(BASE_DIR / "static")
@@ -147,12 +138,10 @@ STATICFILES_DIRS = []
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-
 # MEDIA
 # ------------------------------------------------------------------------------
 MEDIA_ROOT = str(BASE_DIR / "uploads")
 MEDIA_URL = "/uploads/"
-
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
@@ -176,7 +165,6 @@ TEMPLATES = [
     }
 ]
 
-
 # SECURITY
 # ------------------------------------------------------------------------------
 if not DEBUG:
@@ -198,7 +186,6 @@ CORS_ALLOW_HEADERS = [
     "cache-control",
 ]
 
-
 # EMAIL
 # ------------------------------------------------------------------------------
 if env("MAILGUN_API_KEY", default=None):
@@ -216,7 +203,6 @@ if EMAIL_CONFIG:
 DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="webmaster@localhost")
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default="root@localhost")
 
-
 # TELEGRAM
 # ------------------------------------------------------------------------------
 TELEGRAM_API_ID = env("TELEGRAM_API_ID", default=None)
@@ -226,15 +212,6 @@ TELEGRAM_BASE_USERS = env.list(
     "TELEGRAM_BASE_USERS",
     default=[],
 )
-
-TELEGRAM_API_CLIENT = None
-if all([TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_STRING_SESSION]):
-    TELEGRAM_API_CLIENT = TelegramClient(
-        StringSession(TELEGRAM_STRING_SESSION),
-        TELEGRAM_API_ID,
-        TELEGRAM_API_HASH,
-    )
-
 
 # GITLAB
 # ------------------------------------------------------------------------------
@@ -254,13 +231,11 @@ CELERY_TASK_SOFT_TIME_LIMIT = 60
 if USE_TZ:
     CELERY_TIMEZONE = TIME_ZONE
 
-
 # SENTRY
 # ------------------------------------------------------------------------------
 SENTRY_DSN = env("SENTRY_DSN", default=None)
 if SENTRY_DSN is not None:
     sentry_sdk.init(dsn=SENTRY_DSN, integrations=[DjangoIntegration()])
-
 
 # STORAGES
 # ------------------------------------------------------------------------------
@@ -275,7 +250,6 @@ if AWS_ACCESS_KEY_ID:
         "AWS_S3_ENDPOINT_URL", default="https://storage.yandexcloud.net/"
     )
     DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
-
 
 # REST FRAMEWORK
 # ------------------------------------------------------------------------------

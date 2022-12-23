@@ -7,6 +7,7 @@ from telethon.tl.functions.messages import (
 )
 
 from emt.providers.models import Resource
+from emt.providers.telegram.client import TelethonClient
 
 
 class Telegram(Resource):
@@ -56,7 +57,6 @@ class Telegram(Resource):
 
     @staticmethod
     def _get_client():
-        client = settings.TELEGRAM_API_CLIENT
+        client = TelethonClient()
         assert client is not None, "Telegram broken"
-        client.connect()
         return client
