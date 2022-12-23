@@ -34,6 +34,10 @@ class Gitlab(Resource):
 
     @staticmethod
     def _get_client() -> GitlabCLient:
-        client = settings.GITLAB_API_CLIENT
+        client = None
+        if settings.GITLAB_PRIVATE_TOKEN is not None:
+            client = GitlabCLient(
+                settings.GITLAB_HOST, private_token=settings.GITLAB_PRIVATE_TOKEN
+            )
         assert client is not None, "Gitlab broken"
         return client

@@ -3,7 +3,6 @@ from pathlib import Path
 
 import environ
 import sentry_sdk
-from gitlab import Gitlab
 from sentry_sdk.integrations.django import DjangoIntegration
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
@@ -241,9 +240,6 @@ if all([TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_STRING_SESSION]):
 # ------------------------------------------------------------------------------
 GITLAB_HOST = env("GITLAB_HOST", default="https://gitlab.com")
 GITLAB_PRIVATE_TOKEN = env("GITLAB_PRIVATE_TOKEN", default=None)
-GITLAB_API_CLIENT = None
-if GITLAB_PRIVATE_TOKEN is not None:
-    GITLAB_API_CLIENT = Gitlab(GITLAB_HOST, private_token=GITLAB_PRIVATE_TOKEN)
 
 
 # CELERY
