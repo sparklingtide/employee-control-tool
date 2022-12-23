@@ -18,13 +18,13 @@ class Command(BaseCommand):
             "--id",
             dest=self.TELEGRAM_API_ID,
             help="API id for telegram app",
-            default=settings.TELEGRAM_API_ID
+            default=settings.TELEGRAM_API_ID,
         )
         parser.add_argument(
             "--hash",
             dest=self.TELEGRAM_API_HASH,
             help="API hash for telegram app",
-            default=settings.TELEGRAM_API_HASH
+            default=settings.TELEGRAM_API_HASH,
         )
         return super().add_arguments(parser)
 

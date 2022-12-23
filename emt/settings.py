@@ -4,8 +4,6 @@ from pathlib import Path
 import environ
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
-from telethon.sessions import StringSession
-from telethon.sync import TelegramClient
 
 env = environ.Env()
 
@@ -62,6 +60,7 @@ LOCAL_APPS = [
     "emt.providers.openvpn_vault",
     "emt.providers.telegram",
     "emt.providers.testprovider",
+    "emt.providers.gitlab",
 ]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + LOCAL_APPS
@@ -213,6 +212,12 @@ TELEGRAM_BASE_USERS = env.list(
     "TELEGRAM_BASE_USERS",
     default=[],
 )
+
+# GITLAB
+# ------------------------------------------------------------------------------
+GITLAB_HOST = env("GITLAB_HOST", default="https://gitlab.com")
+GITLAB_PRIVATE_TOKEN = env("GITLAB_PRIVATE_TOKEN", default=None)
+
 
 # CELERY
 # ------------------------------------------------------------------------------
