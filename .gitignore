@@ -135,4 +135,5 @@ node_modules/
 
 # Local dev files
 *.session
+*.session-journal
 /docker-compose.yml
