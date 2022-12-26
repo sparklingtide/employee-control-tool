@@ -13,6 +13,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
             "email",
             "telegram",
             "gitlab_username",
+            "discord_username",
             "is_active",
         ]
         read_only_fields = ["id", "is_active"]

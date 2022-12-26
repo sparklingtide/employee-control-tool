@@ -10,6 +10,7 @@ class Employee(models.Model):
     telegram = models.CharField(max_length=100, null=True, blank=True)
     gitlab_username = models.CharField(max_length=100, null=True, blank=True)
     monday_user_id = models.CharField(max_length=100, null=True, blank=True)
+    discord_username = models.CharField(max_length=100, null=True, blank=True)
 
     is_active = models.BooleanField(default=True)
 

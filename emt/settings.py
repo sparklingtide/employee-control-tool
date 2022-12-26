@@ -224,6 +224,12 @@ GITLAB_PRIVATE_TOKEN = env("GITLAB_PRIVATE_TOKEN", default=None)
 MONDAY_TOKEN = env("MONDAY_TOKEN", default=None)
 
 
+# DISCORD
+# ------------------------------------------------------------------------------
+DISCORD_API = env("DISCORD_API", default="https://discord.com/api/v9")
+DISCORD_TOKEN = env("DISCORD_TOKEN", default=None)
+
+
 # CELERY
 # ------------------------------------------------------------------------------
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=None)
