@@ -9,13 +9,11 @@ class DiscordClient:
     def __init__(self, server: int):
         self.server = server
 
-    def get_member_by_username(self, username):
-        response = requests.get(f'{self.api}/guilds/{self.server}/members/search?query={username}',
+    def get_member_by_id(self, user_id):
+        response = requests.get(f'{self.api}/guilds/{self.server}/members/{user_id}',
                                 headers=self.headers)
-        try:
-            return response.json()[0]
-        except (KeyError, IndexError):
-            raise Exception(f'Пользователь {username} не найден на сервере')
+        response.raise_for_status()
+        return response.json()
 
     def kick_member(self, user_id):
         response = requests.delete(f'{self.api}/guilds/{self.server}/members/{user_id}',

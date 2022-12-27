@@ -15,7 +15,7 @@ class Discord(Resource):
             return
 
         client = self._get_client(self.server_id)
-        user = client.get_member_by_username(employee.discord_username)
+        user = client.get_member_by_id(employee.discord_username)
         client.kick_member(user['user']['id'])
 
     @staticmethod
