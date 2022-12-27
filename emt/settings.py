@@ -61,6 +61,7 @@ LOCAL_APPS = [
     "emt.providers.telegram",
     "emt.providers.testprovider",
     "emt.providers.gitlab",
+    "emt.providers.monday",
 ]
 
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + LOCAL_APPS
@@ -217,6 +218,10 @@ TELEGRAM_BASE_USERS = env.list(
 # ------------------------------------------------------------------------------
 GITLAB_HOST = env("GITLAB_HOST", default="https://gitlab.com")
 GITLAB_PRIVATE_TOKEN = env("GITLAB_PRIVATE_TOKEN", default=None)
+
+# MONDAY
+# ------------------------------------------------------------------------------
+MONDAY_TOKEN = env("MONDAY_TOKEN", default=None)
 
 
 # CELERY
