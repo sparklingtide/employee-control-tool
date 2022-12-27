@@ -11,11 +11,11 @@ class Discord(Resource):
         ...
 
     def revoke_access(self, employee):
-        if not employee.discord_username:
+        if not employee.discord_id:
             return
 
         client = self._get_client(self.server_id)
-        user = client.get_member_by_id(employee.discord_username)
+        user = client.get_member_by_id(employee.discord_id)
         client.kick_member(user['user']['id'])
 
     @staticmethod
