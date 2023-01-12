@@ -1,15 +1,25 @@
 import { useState, useEffect } from "react";
-import { Table, Typography} from 'antd';
-import { axiosInstance } from "../../models/axiosInstance";
+import { Space, Switch, Table, Typography} from 'antd';
+import { axiosInstance } from "../../../models/axiosInstance";
 
 
 
-export const Employees = () => {
+export const OpenVPN = () => {
   const columns = [
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email"
+      title: "Host",
+      dataIndex: "openvpn_host",
+      key: "host"
+    },
+    {
+      title: "Port",
+      dataIndex: "openvpn_port",
+      key: "port"
+    },
+    {
+      title: "Vault URL",
+      dataIndex: "vault_url",
+      key: "vault_url"
     },
     {
       title: "Actions",
@@ -33,15 +43,17 @@ export const Employees = () => {
     }
   ]
 
+
   const [data, setData] = useState([]);
   useEffect(() => {
-    axiosInstance.get("/employees/").then(res => setData(res.data));
+    axiosInstance.get("/providers/openvpn/").then(res => setData(res.data));
   }, []);
 
   return (
     <Table
       columns={columns}
       dataSource={data}
+      title={() => "OpenVPN resources"}
     />
   )
 };

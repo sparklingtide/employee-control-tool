@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Space, Switch, Table, Typography} from 'antd';
+import { axiosInstance } from "../../../models/axiosInstance";
 
 
 export const Gitlab = () => {
@@ -41,20 +42,12 @@ export const Gitlab = () => {
     }
   ]
 
-  const data = [
-    {
-      id: 5,
-      name: "Main group",
-      project_id: "1123554",
-      role: "developer"
-    },
-    {
-      id: 6,
-      name: "Samolet dev",
-      project_id: "448784",
-      role: "guest"
-    }
-  ]
+
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    axiosInstance.get("/providers/gitlab/").then(res => setData(res.data));
+  }, []);
+
   return (
     <Table
       columns={columns}

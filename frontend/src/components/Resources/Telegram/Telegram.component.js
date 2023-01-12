@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Space, Switch, Table, Typography} from 'antd';
+import { axiosInstance } from "../../../models/axiosInstance";
+
 
 
 export const Telegram = () => {
@@ -36,18 +38,12 @@ export const Telegram = () => {
     }
   ]
 
-  const data = [
-    {
-      id: 1,
-      name: "Main group",
-      group_id: "1123554"
-    },
-    {
-      id: 2,
-      name: "Samolet dev",
-      group_id: "554688456"
-    }
-  ]
+
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    axiosInstance.get("/providers/telegram/").then(res => setData(res.data));
+  }, []);
+
   return (
     <Table
       columns={columns}

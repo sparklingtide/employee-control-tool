@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Space, Switch, Table, Typography} from 'antd';
-
+import { axiosInstance } from "../../../models/axiosInstance";
 
 export const Discord = () => {
   const columns = [
@@ -36,18 +36,12 @@ export const Discord = () => {
     }
   ]
 
-  const data = [
-    {
-      id: 7,
-      name: "Main group",
-      servier_id: "1123554",
-    },
-    {
-      id: 8,
-      name: "Samolet dev",
-      server_id: "448784",
-    }
-  ]
+
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    axiosInstance.get("/providers/discord/").then(res => setData(res.data));
+  }, []);
+
   return (
     <Table
       columns={columns}

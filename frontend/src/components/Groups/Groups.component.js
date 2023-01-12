@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Table, Typography} from 'antd';
 import { axiosInstance } from "../../models/axiosInstance";
+import useToken from "../useToken";
 
 
 export const Groups = () => {
@@ -32,6 +33,7 @@ export const Groups = () => {
     }
   ]
   const [data, setData] = useState();
+
   useEffect(() => {
     axiosInstance.get("/groups/").then(res => setData(res.data));
   }, []);

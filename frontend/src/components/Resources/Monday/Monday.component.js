@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Space, Switch, Table, Typography} from 'antd';
-
+import { axiosInstance } from "../../../models/axiosInstance";
 
 export const Monday = () => {
   const columns = [
@@ -36,18 +36,12 @@ export const Monday = () => {
     }
   ]
 
-  const data = [
-    {
-      id: 3,
-      name: "Main group",
-      board_id: "1123554"
-    },
-    {
-      id: 4,
-      name: "Samolet dev",
-      board_id: "554688456"
-    }
-  ]
+
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    axiosInstance.get("/providers/monday/").then(res => setData(res.data));
+  }, []);
+
   return (
     <Table
       columns={columns}

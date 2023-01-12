@@ -3,6 +3,7 @@ import { Telegram } from "./Telegram";
 import { Gitlab } from "./Gitlab";
 import { Discord } from "./Discord";
 import { Monday } from "./Monday";
+import { OpenVPN } from './OpenVPN';
 
 
 export const Resources = () => {
@@ -13,6 +14,7 @@ export const Resources = () => {
       size="middle"
       style={{display: 'flex'}}
     >
+      <OpenVPN/>
       <Telegram/>
       <Discord/>
       <Gitlab/>
