@@ -1,7 +1,7 @@
 import styles from './SignIn.module.scss';
 import loginUser from '../../models/auth';
 
-import {  Button, Form, Input  } from 'antd';
+import {  Button, Form, Input } from 'antd';
 
 
 export const SignIn = ({ setToken }) => {

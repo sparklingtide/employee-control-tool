@@ -10,6 +10,8 @@ export const Resources = () => {
   return (
     <Space
       direction="vertical"
+      size="middle"
+      style={{display: 'flex'}}
     >
       <Telegram/>
       <Discord/>

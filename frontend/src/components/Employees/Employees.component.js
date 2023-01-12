@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { Space, Switch, Table, Typography} from 'antd';
+import { useState, useEffect } from "react";
+import { Table, Typography} from 'antd';
+import { axiosInstance } from "../../models/axiosInstance";
+
 
 
 export const Employees = () => {
@@ -31,16 +33,11 @@ export const Employees = () => {
     }
   ]
 
-  const data = [
-    {
-      id: 1,
-      name: "Root",
-    },
-    {
-      id: 2,
-      name: "Test"
-    }
-  ]
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    axiosInstance.get("/employees/").then(res => setData(res.data));
+  }, []);
+
   return (
     <Table
       columns={columns}

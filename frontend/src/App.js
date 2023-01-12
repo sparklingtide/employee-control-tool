@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Menu, theme } from 'antd';
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined
-} from '@ant-design/icons';
+import { Layout, Menu, theme, Space } from 'antd';
 import styles from './App.module.scss';
 import { Groups } from './components/Groups';
 import { Resources } from './components/Resources';
@@ -11,7 +7,7 @@ import { Employees } from './components/Employees';
 import { SignIn } from './components/SignIn';
 import useToken from './components/useToken';
 
-const { Header, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
 function getItem(label, key, content) {
   return {
@@ -22,7 +18,6 @@ function getItem(label, key, content) {
 }
 
 const App = () => {
-  const [collapsed, setCollapsed] = useState(false);
   const [content, setContent] = useState();
   const {
     token: { colorBgContainer },
@@ -31,13 +26,19 @@ const App = () => {
   const { accessToken, setToken } = useToken();
 
   if (!accessToken) {
-    return <SignIn setToken={setToken} />
+    return (
+      <Layout className={styles.appContainer}>
+        <Space>
+          <SignIn setToken={setToken} />
+        </Space>
+      </Layout>
+    )
   }
 
   const items = [
-    getItem("groups", "groups", Groups),
-    getItem("resources", "resources", Resources),
-    getItem("employees", "employees", Employees)
+    getItem("groups", "groups", <Groups/>),
+    getItem("resources", "resources", <Resources/>),
+    getItem("employees", "employees", <Employees/>)
   ];
 
   const changeContent = (props) => {
@@ -50,34 +51,44 @@ const App = () => {
 
   return (
     <Layout className={styles.appContainer}>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className={styles.logo} />
+      <Header
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 1,
+          width: '100%',
+        }}
+      >
+        <div
+          style={{
+            float: 'left',
+            width: 120,
+            height: 31,
+            margin: '16px 24px 16px 0',
+            background: 'rgba(255, 255, 255, 0.2)',
+          }}
+        />
         <Menu
           theme="dark"
-          mode="inline"
+          mode="horizontal"
           defaultSelectedKeys={['groups']}
           items={items}
           onSelect={changeContent}
         />
-      </Sider>
-      <Layout className="site-layout">
-        <Header style={{ padding: 0, background: colorBgContainer }}>
-          {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-            className: styles.trigger,
-            onClick: () => setCollapsed(!collapsed),
-          })}
-        </Header>
-        <Content
-          style={{
-            margin: '24px 16px',
-            padding: 24,
-            background: colorBgContainer,
-            overflow: "initial"
-          }}
-        >
-          {content}
-        </Content>
-      </Layout>
+      </Header>
+
+      <Content
+        className="site-layout"
+        style={{
+          margin: '24px 16px',
+          padding: 24,
+          background: colorBgContainer,
+          overflow: "auto"
+        }}
+      >
+        {content}
+      </Content>
+
     </Layout>
   );
 };
