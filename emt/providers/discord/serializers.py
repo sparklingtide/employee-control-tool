@@ -4,7 +4,6 @@ from .models import Discord
 
 
 class DiscordSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Discord
         fields = (

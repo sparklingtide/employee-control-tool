@@ -1,6 +1,6 @@
 from emt.core.drf.views.common import MappedModelViewSet
-from emt.providers.discord.models import Discord
 from emt.core.drf.views.constants import DEFAULT
+from emt.providers.discord.models import Discord
 from emt.providers.discord.serializers import DiscordSerializer
 
 
